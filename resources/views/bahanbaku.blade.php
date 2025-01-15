@@ -54,11 +54,11 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/laporan-pabrik.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Laporan Overhead Pabrik</p>
+                        <a href="{{ route('laporan.overhead-pabrik') }}"><p class="text-content">Laporan Overhead Pabrik</p></a>
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/laporan-person.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Laporan Tenaga Kerja</p>
+                        <a href="{{ route('laporan.tenaga-kerja') }}"><p class="text-content">Laporan Tenaga Kerja</p></a>
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/laporan-produk.png" class="h-8 my-1 img-icon">

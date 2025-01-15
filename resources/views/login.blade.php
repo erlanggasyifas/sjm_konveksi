@@ -9,7 +9,7 @@
 <body class="h-screen bg-gray-100">
     <div class="bg-white grid grid-cols-3 h-full rounded-lg shadow-lg flex">
         <div class="col-span-2 bg-gray-300 flex items-center justify-center">
-            <img src="../../assets/icon.png" alt="Icon" class="w-12 h-12">
+            <img src="/assets/login-image.png" alt="Icon" class="w-full h-full">
         </div>
 
         <div class="flex-col my-auto p-8">

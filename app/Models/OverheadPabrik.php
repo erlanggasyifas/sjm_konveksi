@@ -16,4 +16,9 @@ class OverheadPabrik extends Model
         'harga_satuan',
         'keterangan',
     ];
+
+    public function produks()
+    {
+        return $this->belongsToMany(Produk::class)->withPivot('jumlah');
+    }
 }

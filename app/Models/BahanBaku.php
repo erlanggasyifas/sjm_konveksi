@@ -9,4 +9,9 @@ class BahanBaku extends Model
     use HasFactory;
 
     protected $fillable = ['kode_bahan_baku', 'nama_bahan_baku', 'satuan', 'harga_satuan'];
+
+    public function produks()
+    {
+        return $this->belongsToMany(Produk::class)->withPivot('jumlah');
+    }
 }

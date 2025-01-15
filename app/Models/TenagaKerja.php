@@ -9,4 +9,8 @@ class TenagaKerja extends Model
     use HasFactory;
 
     protected $fillable = ['kode_tenaga_kerja', 'nama_tenaga_kerja', 'upah', 'bagian'];
+    public function produks()
+    {
+        return $this->belongsToMany(Produk::class)->withPivot('jumlah');
+    }
 }

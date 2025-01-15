@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\OverheadPabrik;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OverheadPabrikController extends Controller
 {
@@ -61,5 +62,11 @@ class OverheadPabrikController extends Controller
         $overheadPabrik->delete();
 
         return redirect()->route('overhead-pabrik.index')->with('success', 'Data berhasil dihapus');
+    }
+    public function laporanOverheadPabrik()
+    {
+        $overheadPabriks = OverheadPabrik::all();
+        $pdf = Pdf::loadView('laporan.overheadpabrik', compact('overheadPabriks'));
+        return $pdf->stream('laporan_overhead_pabrik.pdf');
     }
 }

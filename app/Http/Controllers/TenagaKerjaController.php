@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TenagaKerja;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TenagaKerjaController extends Controller
 {
@@ -69,5 +70,12 @@ class TenagaKerjaController extends Controller
             ->get();
 
         return response()->json($tenagaKerjas);
+    }
+
+    public function laporanTenagaKerja()
+    {
+        $tenagaKerjas = TenagaKerja::all();
+        $pdf = Pdf::loadView('laporan.tenagakerja', compact('tenagaKerjas'));
+        return $pdf->stream('laporan_tenaga_kerja.pdf');
     }
 }
