@@ -35,7 +35,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/person.png" class="h-8 my-1 img-icon">
-                        <a href="{{ route('tenaga-kerja.index') }}"><p class="text-content">Overhead Pabrik</p></a>
+                        <a href="{{ route('tenaga-kerja.index') }}"><p class="text-content">Tenaga Kerja</p></a>
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/product.png" class="h-8 my-1 img-icon">
@@ -50,7 +50,7 @@
                     <p class="text-content">Laporan</p>
                     <div class="flex items-center gap-3">
                         <img src="/assets/laporan-bb.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Laporan Bahan Baku</p>
+                        <a href="{{ route('laporan.bahan-baku') }}"><p class="text-content">Laporan Bahan Baku</p></a>
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/laporan-pabrik.png" class="h-8 my-1 img-icon">
@@ -128,11 +128,11 @@
                                 <td class="border border-gray-300 px-4 py-2 text-sm">{{ $bahanBaku->satuan }}</td>
                                 <td class="border border-gray-300 px-4 py-2 text-sm">Rp. {{ number_format($bahanBaku->harga_satuan, 2) }}</td>
                                 <td class="border border-gray-300 py-2 text-sm">
-                                    <button onclick="editBahanBaku({{ $bahanBaku->id }})" class="text-blue-600 bg-blue-500 rounded-lg p-1 mx-1"><img src="/assets/pencil.png" alt=""></button>
+                                    <button onclick="editBahanBaku({{ $bahanBaku->id }})" class="text-blue-600 bg-blue-500 rounded-lg mx-1 p-1"><img src="/assets/pencil.png" class="w-3/4 mx-auto" alt=""></button>
                                     <form action="{{ route('bahan-baku.destroy', $bahanBaku->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 bg-red-500 rounded-lg p-1 mx-1"><img src="/assets/trash.png" alt=""></button>
+                                        <button type="submit" class="text-red-600 bg-red-500 rounded-lg p-1 mx-1"><img src="/assets/trash.png" class="w-3/4 mx-auto" alt=""></button>
                                     </form>
                                 </td>
                             </tr>

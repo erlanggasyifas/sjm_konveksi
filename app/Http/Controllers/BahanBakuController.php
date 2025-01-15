@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BahanBaku;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BahanBakuController extends Controller
 {
@@ -62,5 +63,12 @@ class BahanBakuController extends Controller
         $query = $request->get('query');
         $bahanBakus = BahanBaku::where('nama_bahan_baku', 'like', '%' . $query . '%')->get();
         return response()->json($bahanBakus);
+    }
+
+    public function laporanBahanBaku()
+    {
+        $bahanBakus = BahanBaku::all();
+        $pdf = Pdf::loadView('laporan.bahanbaku', compact('bahanBakus'));
+        return $pdf->stream('laporan_bahan_baku.pdf');
     }
 }

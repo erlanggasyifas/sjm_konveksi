@@ -20,12 +20,18 @@ class AuthController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        $user = User::where('name', $request->username)
-                    ->first();
+        $user = User::where('name', $request->username)->first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user);
-            return redirect()->route('bahan-baku.index');
+        if ($user) {
+            if (password_get_info($user->password)['algoName'] !== 'bcrypt') {
+                $user->password = Hash::make($request->password);
+                $user->save();
+            }
+
+            if (Hash::check($request->password, $user->password)) {
+                Auth::login($user);
+                return redirect()->route('bahan-baku.index');
+            }
         }
 
         return back()->withErrors([
