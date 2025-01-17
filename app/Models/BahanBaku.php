@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Produk;
 
 class BahanBaku extends Model
 {
@@ -12,6 +13,6 @@ class BahanBaku extends Model
 
     public function produks()
     {
-        return $this->belongsToMany(Produk::class)->withPivot('jumlah');
+        return $this->hasMany(Produk::class, 'bahan_baku_id');
     }
 }
