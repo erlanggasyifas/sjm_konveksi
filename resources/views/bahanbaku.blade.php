@@ -39,7 +39,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/product.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Produk</p>
+                        <a href="{{ route('produk.index') }}"><p class="text-content">Produk</p></a>
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/profile.png" class="h-8 my-1 img-icon">
