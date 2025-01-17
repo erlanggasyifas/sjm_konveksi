@@ -31,10 +31,10 @@
               <th class="border border-gray-300 px-4 py-2 text-sm text-left">Nama Produk</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody style="cursor: pointer;">
             @if($produks->isNotEmpty())
               @foreach($produks as $produk)
-                <tr>
+                <tr onclick="loadProdukData({{ $produk->id }})">
                   <td class="border border-gray-300 px-4 py-2 text-sm text-center">{{ $produk->kode_produk }}</td>
                   <td class="border border-gray-300 px-4 py-2 text-sm text-center">{{ $produk->nama_produk }}</td>
                 </tr>
@@ -60,7 +60,7 @@
             </div>
             <input type="text" placeholder="Cari..." class="border rounded px-3 py-2 text-sm focus:outline-yellow-500">
           </div>
-          <table class="w-full border-collapse border border-gray-300">
+          <table id="bahan-baku-table" class="w-full border-collapse border border-gray-300">
             <thead class="bg-yellow-500">
               <tr>
                 <th class="border border-gray-300 px-4 py-2 text-sm text-left">Kode Bahan Baku</th>
@@ -93,7 +93,7 @@
             </div>
             <input type="text" placeholder="Cari..." class="border rounded px-3 py-2 text-sm focus:outline-yellow-500">
           </div>
-          <table class="w-full border-collapse border border-gray-300">
+          <table id="overhead-table" class="w-full border-collapse border border-gray-300">
             <thead class="bg-yellow-500">
               <tr>
                 <th class="border border-gray-300 px-4 py-2 text-sm text-left">Kode Overhead</th>
@@ -126,7 +126,7 @@
             </div>
             <input type="text" placeholder="Cari..." class="border rounded px-3 py-2 text-sm focus:outline-yellow-500">
           </div>
-          <table class="w-full border-collapse border border-gray-300">
+          <table id="tenaga-kerja-table" class="w-full border-collapse border border-gray-300">
             <thead class="bg-yellow-500">
               <tr>
                 <th class="border border-gray-300 px-4 py-2 text-sm">Kode Tenaga Kerja</th>
@@ -134,7 +134,6 @@
                 <th class="border border-gray-300 px-4 py-2 text-sm">Upah/Bulan</th>
                 <th class="border border-gray-300 px-4 py-2 text-sm">Bagian</th>
                 <th class="border border-gray-300 px-4 py-2 text-sm">Jumlah</th>
-                <th class="border border-gray-300 px-4 py-2 text-sm">Total</th>
               </tr>
             </thead>
             <tbody>
@@ -235,6 +234,35 @@
     // Fungsi untuk mereset form
     function resetForm() {
       form.reset(); // Reset semua input di dalam form
+    }
+
+    function loadProdukData(produkId) {
+      fetch(`/produk/${produkId}`)
+        .then(response => response.json())
+        .then(data => {
+          fillTable('bahan-baku-table', data.bahan_baku);
+          fillTable('overhead-table', data.overhead);
+          fillTable('tenaga-kerja-table', data.tenaga_kerja);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function fillTable(tableId, data) {
+      const tableBody = document.querySelector(`#${tableId} tbody`);
+      tableBody.innerHTML = '';
+
+      if (Object.keys(data).length > 0) {
+        const row = document.createElement('tr');
+
+        Object.entries(data).forEach(([key, value]) => {
+          const cell = document.createElement('td');
+          cell.className = 'border border-gray-300 px-4 py-2 text-sm text-center';
+          cell.textContent = [value];
+          row.appendChild(cell);
+        });
+
+        tableBody.appendChild(row);
+      }
     }
 
     // Fungsi-fungsi lain (opsional)

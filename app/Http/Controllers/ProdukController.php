@@ -45,4 +45,29 @@ class ProdukController extends Controller
     
         return redirect()->route('produk.index');
     }
+
+    public function show($id)
+    {
+        $produk = Produk::find($id);
+
+        $bahanBaku = $produk->bahanBakus->makeHidden(['id', 'created_at', 'updated_at']);
+        $overheadPabrik = $produk->overheadPabriks->makeHidden(['id', 'keterangan', 'created_at', 'updated_at']);
+        $tenagaKerja = $produk->tenagaKerjas->makeHidden(['id', 'created_at', 'updated_at']);
+
+        $bahanBaku->jumlah = $produk->jumlah_bahan_baku;
+        $bahanBaku->total = "Rp " . number_format((float)$bahanBaku->harga_satuan * (float)$bahanBaku->jumlah, 0, ',', '.');
+
+        $overheadPabrik->jumlah = $produk->jumlah_overhead;
+        $overheadPabrik->total = "Rp " . number_format((float)$overheadPabrik->harga_satuan * (float)$overheadPabrik->jumlah, 0, ',', '.');
+
+        $tenagaKerja->jumlah = $produk->jumlah_tenaga_kerja;
+
+        $data = [
+            'bahan_baku' => $bahanBaku,
+            'overhead' => $overheadPabrik,
+            'tenaga_kerja' => $tenagaKerja,
+        ];
+
+        return response()->json($data);
+    }
 }
