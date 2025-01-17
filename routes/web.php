@@ -17,4 +17,4 @@ Route::get('/laporan-overhead-pabrik', [OverheadPabrikController::class, 'lapora
 Route::resource('tenaga-kerja', TenagaKerjaController::class);
 Route::get('search-tenaga-kerja', [TenagaKerjaController::class, 'search']);
 Route::get('/laporan-tenaga-kerja', [TenagaKerjaController::class, 'laporanTenagaKerja'])->name('laporan.tenaga-kerja');
-Route::resource('produk', ProdukController::class);
+Route::resource('produk', ProdukController::class)->parameters(['produk' => 'id',]);

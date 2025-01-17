@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Produk;
 
 class OverheadPabrik extends Model
 {
@@ -19,6 +20,6 @@ class OverheadPabrik extends Model
 
     public function produks()
     {
-        return $this->belongsToMany(Produk::class)->withPivot('jumlah');
+        return $this->hasMany(Produk::class, 'overhead_id');
     }
 }
