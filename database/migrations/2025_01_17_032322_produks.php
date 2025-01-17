@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('produk', function (Blueprint $table) {
+        Schema::create('produks', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_produk', 255)->index();
+            $table->string('kode_produk', 255)->unique();
             $table->string('nama_produk', 255);
             $table->unsignedBigInteger('bahan_baku_id')->index();
             $table->unsignedBigInteger('jumlah_bahan_baku');
@@ -22,6 +22,24 @@ return new class extends Migration
             $table->unsignedBigInteger('tenaga_kerja_id')->index();
             $table->unsignedBigInteger('jumlah_tenaga_kerja');
             $table->timestamps();
+
+            $table->foreign('bahan_baku_id')
+                  ->references('id')
+                  ->on('bahan_bakus')
+                  ->onDelete('no action')
+                  ->onUpdate('no action');
+
+            $table->foreign('overhead_id')
+                  ->references('id')
+                  ->on('overhead_pabriks')
+                  ->onDelete('no action')
+                  ->onUpdate('no action');
+
+            $table->foreign('tenaga_kerja_id')
+                  ->references('id')
+                  ->on('tenaga_kerjas')
+                  ->onDelete('no action')
+                  ->onUpdate('no action');
         });
     }
 
@@ -30,6 +48,12 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('produks', function (Blueprint $table) {
+            $table->dropForeign(['bahan_baku_id']);
+            $table->dropForeign(['overhead_id']);
+            $table->dropForeign(['tenaga_kerja_id']);
+        });
+
         Schema::dropIfExists('produks');
     }
 };
