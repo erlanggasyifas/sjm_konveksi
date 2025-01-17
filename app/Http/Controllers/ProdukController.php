@@ -61,6 +61,7 @@ class ProdukController extends Controller
         $overheadPabrik->total = "Rp " . number_format((float)$overheadPabrik->harga_satuan * (float)$overheadPabrik->jumlah, 0, ',', '.');
 
         $tenagaKerja->jumlah = $produk->jumlah_tenaga_kerja;
+        $tenagaKerja->total = "Rp " . number_format((float)$tenagaKerja->upah * (float)$tenagaKerja->jumlah, 0, ',', '.');
         
         $data = [
             'bahan_baku' => $bahanBaku,

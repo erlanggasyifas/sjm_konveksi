@@ -194,6 +194,7 @@
                                         <th class="border border-gray-300 px-4 py-2 text-sm">Upah/Bulan</th>
                                         <th class="border border-gray-300 px-4 py-2 text-sm">Bagian</th>
                                         <th class="border border-gray-300 px-4 py-2 text-sm">Jumlah</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-sm">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
