@@ -6,7 +6,7 @@
         <title>Data Produk</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body class="overflow-hidden">
+    <body class="h-fit">
         <div class="navbar-layout bg-orange-400 h-16 px-6 flex items-center justify-between">
             <p>SJM Konveksi</p>
             <img src="/assets/sidebar-burger.png" class="h-10 cursor-pointer" id="toggle-sidebar" />
@@ -139,7 +139,7 @@
                             </table>
                             <div class="flex justify-between items-center mt-4">
                                 <p>Total Bahan Baku:</p>
-                                <p>76.000</p>
+                                <p id="total-bahan-baku">0</p>
                             </div>
                         </div>
 
@@ -172,7 +172,7 @@
                             </table>
                             <div class="flex justify-between items-center mt-4">
                                 <p>Total Overhead:</p>
-                                <p>76.000</p>
+                                <p id="total-overhead">0</p>
                             </div>
                         </div>
 
@@ -202,18 +202,10 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="flex justify-between items-center mt-4">
-                                <p>Total Tenaga Kerja:</p>
-                                <p>76.000</p>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="container mx-auto mt-6">
-            <!-- Main Content -->
         </div>
 
         <!-- Modal -->
@@ -306,30 +298,72 @@
                 fetch(`/produk/${produkId}`)
                     .then((response) => response.json())
                     .then((data) => {
+                        console.log("Data dari server:", data); // Debug respons dari server
+                        
+                        // Isi tabel dengan data yang diambil
                         fillTable("bahan-baku-table", data.bahan_baku);
                         fillTable("overhead-table", data.overhead);
                         fillTable("tenaga-kerja-table", data.tenaga_kerja);
+
+                        // Hitung total berdasarkan data server
+                        const totalBahanBaku = calculateTotal(data.bahan_baku);
+                        const totalOverhead = calculateTotal(data.overhead);
+                      
+                        // Update total di UI
+                        document.getElementById("total-bahan-baku").textContent = totalBahanBaku;
+                        document.getElementById("total-overhead").textContent = totalOverhead;
                     })
                     .catch((error) => console.error("Error:", error));
             }
 
+
             function fillTable(tableId, data) {
+                console.log(`Mengisi tabel ${tableId} dengan data:`, data); // Debug isi data
                 const tableBody = document.querySelector(`#${tableId} tbody`);
                 tableBody.innerHTML = "";
 
-                if (Object.keys(data).length > 0) {
+                if (data && Object.keys(data).length > 0) {
                     const row = document.createElement("tr");
 
                     Object.entries(data).forEach(([key, value]) => {
                         const cell = document.createElement("td");
                         cell.className = "border border-gray-300 px-4 py-2 text-sm text-center";
-                        cell.textContent = [value];
+                        cell.textContent = value;
                         row.appendChild(cell);
                     });
 
                     tableBody.appendChild(row);
+                } else {
+                    const row = document.createElement("tr");
+                    const cell = document.createElement("td");
+                    cell.className = "border border-gray-300 px-4 py-2 text-sm text-center";
+                    cell.colSpan = 6;
+                    cell.textContent = "Tidak ada data.";
+                    row.appendChild(cell);
+                    tableBody.appendChild(row);
                 }
             }
+
+
+            function calculateTotal(data) {
+                if (!data) return "Rp 0";
+
+                // Ambil jumlah dan harga_satuan untuk menghitung total jika total tidak tersedia
+                const jumlah = parseFloat(data.jumlah || 0);
+                const hargaSatuan = parseFloat(data.harga_satuan || 0);
+
+                // Hitung total
+                const numericTotal = jumlah * hargaSatuan;
+
+                // Format total menjadi "Rp 40.000"
+                const formattedTotal = "Rp " + new Intl.NumberFormat("id-ID", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                }).format(numericTotal);
+
+                return formattedTotal;
+            }
+
 
             // Fungsi-fungsi lain (opsional)
             function openBahanBakuModal() {
