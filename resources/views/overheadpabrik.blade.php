@@ -13,7 +13,7 @@
     </div>
 
     <div class="flex">
-        <div class="sidebar-layout bg-white px-6 transition-all duration-300 w-fit h-screen overflow-y-auto" id="sidebar">
+    <div class="sidebar-layout bg-white px-6 transition-all duration-300 w-fit h-screen overflow-y-auto" id="sidebar">
             <div>
                 <div class="flex gap-3 py-6 items-center">
                     <img src="/assets/profile.png" class="h-12">
@@ -42,30 +42,22 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/profile.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">HPP</p>
+                        <a href="{{ route('hpp.index') }}"><p class="text-content">Hpp</p></a>
                     </div>
                 </div>
                 <div>
                     <p class="text-content">Laporan</p>
                     <div class="flex items-center gap-3">
                         <img src="/assets/laporan-bb.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Laporan Bahan Baku</p>
+                        <a href="{{ route('laporan.bahan-baku') }}"><p class="text-content">Laporan Bahan Baku</p></a>
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/laporan-pabrik.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Laporan Overhead Pabrik</p>
+                        <a href="{{ route('laporan.overhead-pabrik') }}"><p class="text-content">Laporan Overhead Pabrik</p></a>
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/laporan-person.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Laporan Tenaga Kerja</p>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <img src="/assets/laporan-produk.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Laporan Produk</p>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <img src="/assets/laporan-hpp.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Laporan HPP</p>
+                        <a href="{{ route('laporan.tenaga-kerja') }}"><p class="text-content">Laporan Tenaga Kerja</p></a>
                     </div>
                 </div>
             </div>

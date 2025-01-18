@@ -43,7 +43,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <img src="/assets/profile.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">HPP</p>
+                        <a href="{{ route('hpp.index') }}"><p class="text-content">Hpp</p></a>
                     </div>
                 </div>
                 <div>
@@ -59,14 +59,6 @@
                     <div class="flex items-center gap-3">
                         <img src="/assets/laporan-person.png" class="h-8 my-1 img-icon">
                         <a href="{{ route('laporan.tenaga-kerja') }}"><p class="text-content">Laporan Tenaga Kerja</p></a>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <img src="/assets/laporan-produk.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Laporan Produk</p>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <img src="/assets/laporan-hpp.png" class="h-8 my-1 img-icon">
-                        <p class="text-content">Laporan HPP</p>
                     </div>
                 </div>
             </div>

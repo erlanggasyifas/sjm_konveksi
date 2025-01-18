@@ -4,8 +4,9 @@ use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\OverheadPabrikController;
 use App\Http\Controllers\TenagaKerjaController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\HppController;
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::resource('bahan-baku', BahanBakuController::class);
@@ -18,3 +19,5 @@ Route::resource('tenaga-kerja', TenagaKerjaController::class);
 Route::get('search-tenaga-kerja', [TenagaKerjaController::class, 'search']);
 Route::get('/laporan-tenaga-kerja', [TenagaKerjaController::class, 'laporanTenagaKerja'])->name('laporan.tenaga-kerja');
 Route::resource('produk', ProdukController::class)->parameters(['produk' => 'id',]);
+Route::resource('hpp', HppController::class);
+Route::get('/generate-pdf', [HppController::class, 'generatePdf']);

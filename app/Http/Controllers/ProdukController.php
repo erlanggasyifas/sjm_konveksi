@@ -55,10 +55,10 @@ class ProdukController extends Controller
         $tenagaKerja = $produk->tenagaKerjas->makeHidden(['id', 'created_at', 'updated_at']);
 
         $bahanBaku->jumlah = $produk->jumlah_bahan_baku;
-        $bahanBaku->total = "Rp " . number_format((float)$bahanBaku->harga_satuan * (float)$bahanBaku->jumlah, 0, ',', '.');
+        $bahanBaku->total = (float)$bahanBaku->harga_satuan * (float)$bahanBaku->jumlah; // Return as numeric
 
         $overheadPabrik->jumlah = $produk->jumlah_overhead;
-        $overheadPabrik->total = "Rp " . number_format((float)$overheadPabrik->harga_satuan * (float)$overheadPabrik->jumlah, 0, ',', '.');
+        $overheadPabrik->total = (float)$overheadPabrik->harga_satuan * (float)$overheadPabrik->jumlah; // Return as numeric
 
         $tenagaKerja->jumlah = $produk->jumlah_tenaga_kerja;
         
