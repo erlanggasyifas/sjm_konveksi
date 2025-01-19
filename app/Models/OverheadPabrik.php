@@ -20,6 +20,8 @@ class OverheadPabrik extends Model
 
     public function produks()
     {
-        return $this->hasMany(Produk::class, 'overhead_id');
+        return $this->belongsToMany(Produk::class, 'produk_overhead', 'overhead_id', 'produk_id')
+                    ->withPivot('jumlah_overhead')
+                    ->withTimestamps();
     }
 }

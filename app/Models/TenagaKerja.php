@@ -13,6 +13,8 @@ class TenagaKerja extends Model
 
     public function produks()
     {
-        return $this->hasMany(Produk::class, 'tenaga_kerja_id');
+        return $this->belongsToMany(Produk::class, 'produk_tenaga_kerja', 'tenaga_kerja_id', 'produk_id')
+                    ->withPivot('jumlah_tenaga_kerja')
+                    ->withTimestamps();
     }
 }
