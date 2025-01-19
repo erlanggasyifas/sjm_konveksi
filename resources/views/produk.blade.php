@@ -311,37 +311,35 @@
             }
 
             function fillTable(tableId, data) {
-                console.log(`Mengisi tabel ${tableId} dengan data:`, data); // Debug isi data
                 const tableBody = document.querySelector(`#${tableId} tbody`);
                 tableBody.innerHTML = "";
 
-                if (data && Object.keys(data).length > 0) {
-                    const row = document.createElement("tr");
+                if (data && data.length > 0) {
+                    data.forEach((item) => {
+                        const row = document.createElement("tr");
 
-                    Object.entries(data).forEach(([key, value]) => {
-                        const cell = document.createElement("td");
-                        cell.className = "border border-gray-300 px-4 py-2 text-sm text-center";
-                        cell.textContent = value;
-                        row.appendChild(cell);
-                    });
+                        Object.entries(item).forEach(([key, value]) => {
+                            const cell = document.createElement("td");
+                            cell.className = "border border-gray-300 px-4 py-2 text-sm text-center";
+                            cell.textContent = value;
+                            row.appendChild(cell);
+                        });
 
-                    tableBody.appendChild(row);
+                        tableBody.appendChild(row);
                     });
                 }
             }
 
-
+            
             function calculateTotal(data) {
                 if (!data) return "Rp 0";
 
-                // Ambil jumlah dan harga_satuan untuk menghitung total jika total tidak tersedia
-                const jumlah = parseFloat(data.jumlah || 0);
-                const hargaSatuan = parseFloat(data.harga_satuan || 0);
+                const numericTotal = data.reduce((acc, item) => {
+                    const jumlah = parseFloat(item.jumlah || 0);
+                    const hargaSatuan = parseFloat(item.harga_satuan || 0);
+                    return acc + jumlah * hargaSatuan;
+                }, 0);
 
-                // Hitung total
-                const numericTotal = jumlah * hargaSatuan;
-
-                // Format total menjadi "Rp 40.000"
                 const formattedTotal = "Rp " + new Intl.NumberFormat("id-ID", {
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 0,

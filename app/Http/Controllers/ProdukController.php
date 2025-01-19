@@ -32,14 +32,20 @@ class ProdukController extends Controller
             'jumlah_tenaga_kerja' => 'required|numeric',
         ]);
     
-        Produk::create([
+        $produk = Produk::create([
             'kode_produk' => 'P-' . (Produk::count() + 1),
             'nama_produk' => $request->nama_produk,
-            'bahan_baku_id' => $request->bahan_baku_id,
+        ]);
+
+        $produk->bahanBakus()->attach($request->bahan_baku_id, [
             'jumlah_bahan_baku' => $request->jumlah_bahan_baku,
-            'overhead_id' => $request->overhead_id,
+        ]);
+
+        $produk->overheadPabriks()->attach($request->overhead_id, [
             'jumlah_overhead' => $request->jumlah_overhead,
-            'tenaga_kerja_id' => $request->tenaga_kerja_id,
+        ]);
+
+        $produk->tenagaKerjas()->attach($request->tenaga_kerja_id, [
             'jumlah_tenaga_kerja' => $request->jumlah_tenaga_kerja,
         ]);
     
@@ -50,22 +56,42 @@ class ProdukController extends Controller
     {
         $produk = Produk::find($id);
 
-        $bahanBaku = $produk->bahanBakus->makeHidden(['id', 'created_at', 'updated_at']);
-        $overheadPabrik = $produk->overheadPabriks->makeHidden(['id', 'keterangan', 'created_at', 'updated_at']);
-        $tenagaKerja = $produk->tenagaKerjas->makeHidden(['id', 'created_at', 'updated_at']);
+        $bahanBakus = $produk->bahanBakus->map(function ($bahanBaku) {
+            return [
+                'kode_bahan_baku' => $bahanBaku->kode_bahan_baku,
+                'nama_bahan_baku' => $bahanBaku->nama_bahan_baku,
+                'satuan' => $bahanBaku->satuan,
+                'harga_satuan' => $bahanBaku->harga_satuan,
+                'jumlah' => $bahanBaku->pivot->jumlah_bahan_baku,
+                'total' => (float)$bahanBaku->harga_satuan * (float)$bahanBaku->pivot->jumlah_bahan_baku,
+            ];
+        });
 
-        $bahanBaku->jumlah = $produk->jumlah_bahan_baku;
-        $bahanBaku->total = (float)$bahanBaku->harga_satuan * (float)$bahanBaku->jumlah; // Return as numeric
+        $overheadPabriks = $produk->overheadPabriks->map(function ($overheadPabrik) {
+            return [
+                'kode_overhead' => $overheadPabrik->kode_overhead,
+                'nama_overhead' => $overheadPabrik->nama_overhead,
+                'satuan' => $overheadPabrik->satuan,
+                'harga_satuan' => $overheadPabrik->harga_satuan,
+                'jumlah' => $overheadPabrik->pivot->jumlah_overhead,
+                'total' => (float)$overheadPabrik->harga_satuan * (float)$overheadPabrik->pivot->jumlah_overhead,
+            ];
+        });
 
-        $overheadPabrik->jumlah = $produk->jumlah_overhead;
-        $overheadPabrik->total = (float)$overheadPabrik->harga_satuan * (float)$overheadPabrik->jumlah; // Return as numeric
-
-        $tenagaKerja->jumlah = $produk->jumlah_tenaga_kerja;
+        $tenagaKerjas = $produk->tenagaKerjas->map(function ($tenagaKerja) {
+            return [
+                'kode_tenaga_kerja' => $tenagaKerja->kode_tenaga_kerja,
+                'nama_tenaga_kerja' => $tenagaKerja->nama_tenaga_kerja,
+                'upah' => $tenagaKerja->upah,
+                'bagian' => $tenagaKerja->bagian,
+                'jumlah_tenaga_kerja' => $tenagaKerja->pivot->jumlah_tenaga_kerja,
+            ];
+        });
         
         $data = [
-            'bahan_baku' => $bahanBaku,
-            'overhead' => $overheadPabrik,
-            'tenaga_kerja' => $tenagaKerja,
+            'bahan_baku' => $bahanBakus,
+            'overhead' => $overheadPabriks,
+            'tenaga_kerja' => $tenagaKerjas,
         ];
 
         return response()->json($data);
