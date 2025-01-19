@@ -326,14 +326,7 @@
                     });
 
                     tableBody.appendChild(row);
-                } else {
-                    const row = document.createElement("tr");
-                    const cell = document.createElement("td");
-                    cell.className = "border border-gray-300 px-4 py-2 text-sm text-center";
-                    cell.colSpan = 6;
-                    cell.textContent = "Tidak ada data.";
-                    row.appendChild(cell);
-                    tableBody.appendChild(row);
+                    });
                 }
             }
 
