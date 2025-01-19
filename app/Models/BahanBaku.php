@@ -13,6 +13,8 @@ class BahanBaku extends Model
 
     public function produks()
     {
-        return $this->hasMany(Produk::class, 'bahan_baku_id');
+        return $this->belongsToMany(Produk::class, 'produk_bahan_baku', 'bahan_baku_id', 'produk_id')
+                    ->withPivot('jumlah_bahan_baku')
+                    ->withTimestamps();
     }
 }

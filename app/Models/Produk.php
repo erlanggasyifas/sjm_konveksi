@@ -15,26 +15,26 @@ class Produk extends Model
     protected $fillable = [
         'kode_produk',
         'nama_produk',
-        'bahan_baku_id',
-        'jumlah_bahan_baku',
-        'overhead_id',
-        'jumlah_overhead',
-        'tenaga_kerja_id',
-        'jumlah_tenaga_kerja',
     ];
 
     public function bahanBakus()
     {
-        return $this->belongsTo(BahanBaku::class, 'bahan_baku_id');
+        return $this->belongsToMany(BahanBaku::class, 'produk_bahan_baku', 'produk_id', 'bahan_baku_id')
+                    ->withPivot('jumlah_bahan_baku')
+                    ->withTimestamps();
     }
 
     public function overheadPabriks()
     {
-        return $this->belongsTo(OverheadPabrik::class, 'overhead_id');
+        return $this->belongsToMany(OverheadPabrik::class, 'produk_overhead', 'produk_id', 'overhead_id')
+                    ->withPivot('jumlah_overhead')
+                    ->withTimestamps();
     }
-
-    public function TenagaKerjas()
+    
+    public function tenagaKerjas()
     {
-        return $this->belongsTo(TenagaKerja::class, 'tenaga_kerja_id');
+        return $this->belongsToMany(TenagaKerja::class, 'produk_tenaga_kerja', 'produk_id', 'tenaga_kerja_id')
+                    ->withPivot('jumlah_tenaga_kerja')
+                    ->withTimestamps();
     }
 }

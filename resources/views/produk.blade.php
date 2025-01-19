@@ -87,7 +87,7 @@
                             </thead>
                             <tbody style="cursor: pointer;">
                                 @if($produks->isNotEmpty()) @foreach($produks as $produk)
-                                <tr onclick="loadProdukData({{ $produk->id }})">
+                                <tr data-id="{{ $produk->id }}" data-kode-produk="{{ $produk->kode_produk }}" onclick="loadProdukData({{ $produk->id }})">
                                     <td class="border border-gray-300 px-4 py-2 text-sm text-center">{{ $produk->kode_produk }}</td>
                                     <td class="border border-gray-300 px-4 py-2 text-sm text-center">{{ $produk->nama_produk }}</td>
                                 </tr>
@@ -106,7 +106,7 @@
                         <div class="bg-white shadow rounded-lg p-6 mb-6">
                             <div class="flex justify-between items-center mb-4">
                                 <div class="flex gap-3">
-                                    <button class="bg-yellow-500 text-white rounded px-3 py-1 text-sm hover:bg-yellow-600" onclick="openBahanBakuModal()">+</button>
+                                    <button id="button-modal-bahan-baku" class="bg-yellow-500 text-white rounded px-3 py-1 text-sm hover:bg-yellow-600">+</button>
                                     <button class="bg-yellow-500 text-white rounded px-3 py-1 text-sm hover:bg-yellow-600">-</button>
                                     <h2 class="text-lg font-semibold">Tabel Daftar Bahan Baku</h2>
                                 </div>
@@ -139,7 +139,7 @@
                         <div class="bg-white shadow rounded-lg p-6 mb-6">
                             <div class="flex justify-between items-center mb-4">
                                 <div class="flex gap-3">
-                                    <button class="bg-yellow-500 text-white rounded px-3 py-1 text-sm hover:bg-yellow-600" onclick="openOverheadModal()">+</button>
+                                    <button id="button-modal-overhead" class="bg-yellow-500 text-white rounded px-3 py-1 text-sm hover:bg-yellow-600">+</button>
                                     <button class="bg-yellow-500 text-white rounded px-3 py-1 text-sm hover:bg-yellow-600">-</button>
                                     <h2 class="text-lg font-semibold">Tabel Daftar Overhead</h2>
                                 </div>
@@ -172,7 +172,7 @@
                         <div class="bg-white shadow rounded-lg p-6">
                             <div class="flex justify-between items-center mb-4">
                                 <div class="flex gap-3">
-                                    <button class="bg-yellow-500 text-white rounded px-3 py-1 text-sm hover:bg-yellow-600" onclick="openTenagaKerjaModal()">+</button>
+                                    <button id="button-modal-tenaga-kerja" class="bg-yellow-500 text-white rounded px-3 py-1 text-sm hover:bg-yellow-600">+</button>
                                     <button class="bg-yellow-500 text-white rounded px-3 py-1 text-sm hover:bg-yellow-600">-</button>
                                     <h2 class="text-lg font-semibold">Tabel Daftar Tenaga Kerja</h2>
                                 </div>
@@ -200,98 +200,113 @@
             </div>
         </div>
 
-        <!-- Modal -->
-        <div id="modal-produk" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-            <div class="bg-white rounded-lg p-6 w-1/3">
-                <h2 class="text-lg font-semibold mb-4">Tambah Produk</h2>
-                <form action="{{ route('produk.store') }}" method="POST">
-                    @csrf
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Nama Produk</label>
-                        <input type="text" name="nama_produk" class="mt-2 mb-4 block w-full rounded-md border-gray-300 shadow-sm outline outline-1 outline-yellow-500 focus:outline-yellow-500 h-10 px-2 py-2" />
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Nama Bahan Baku</label>
-                        <select name="bahan_baku_id" class="mt-2 mb-4 block w-full rounded-md border-gray-300 shadow-sm outline outline-1 outline-yellow-500 focus:outline-yellow-500 h-10 px-1 py-2">
-                            <option value="" disabled selected>Pilih Bahan Baku</option>
-                            @foreach($bahanBakus as $bahanBaku)
-                            <option value="{{ $bahanBaku->id }}">{{ $bahanBaku->nama_bahan_baku }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Jumlah Bahan Baku</label>
-                        <input type="number" name="jumlah_bahan_baku" min="0" class="mt-2 mb-4 block w-full rounded-md border-gray-300 shadow-sm outline outline-1 outline-yellow-500 focus:outline-yellow-500 h-10 px-2 py-2" />
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Nama Overhead</label>
-                        <select name="overhead_id" class="mt-2 mb-4 block w-full rounded-md border-gray-300 shadow-sm outline outline-1 outline-yellow-500 focus:outline-yellow-500 h-10 px-1 py-2">
-                            <option value="" disabled selected>Pilih Overhead</option>
-                            @foreach($overheadPabriks as $overheadPabrik)
-                            <option value="{{ $overheadPabrik->id }}">{{ $overheadPabrik->nama_overhead }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Jumlah Overhead</label>
-                        <input type="number" name="jumlah_overhead" min="0" class="mt-2 mb-4 block w-full rounded-md border-gray-300 shadow-sm outline outline-1 outline-yellow-500 focus:outline-yellow-500 h-10 px-2 py-2" />
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Nama Tenaga Kerja</label>
-                        <select name="tenaga_kerja_id" class="mt-2 mb-4 block w-full rounded-md border-gray-300 shadow-sm outline outline-1 outline-yellow-500 focus:outline-yellow-500 h-10 px-1 py-2">
-                            <option value="" disabled selected>Pilih Tenaga Kerja</option>
-                            @foreach($tenagaKerjas as $tenagaKerja)
-                            <option value="{{ $tenagaKerja->id }}">{{ $tenagaKerja->nama_tenaga_kerja }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Jumlah Tenaga Kerja</label>
-                        <input type="number" name="jumlah_tenaga_kerja" min="0" class="mt-2 mb-4 block w-full rounded-md border-gray-300 shadow-sm outline outline-1 outline-yellow-500 focus:outline-yellow-500 h-10 px-2 py-2" />
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button" class="bg-gray-500 text-white rounded px-4 py-2 mr-2" onclick="closeProductModal()">Batal</button>
-                        <button type="submit" class="bg-yellow-500 text-white rounded px-4 py-2">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <!-- Modal Produk -->
+        @include('partials.produkmodal', ['id' => 'modal-produk', 'route' => route('produk.store')])
+
+        <!-- Modal Bahan Baku -->
+        @include('partials.bahanbakumodal', ['id' => 'modal-tabel-bahan-baku', 'route' => route('produk.bahan-baku.store')])
+
+        <!-- Modal Overhead Pabrik -->
+        @include('partials.overheadpabrikmodal', ['id' => 'modal-tabel-overhead', 'route' => route('produk.overhead-pabrik.store')])
+
+        <!-- Modal Tenaga Kerja -->
+        @include('partials.tenagakerjamodal', ['id' => 'modal-tabel-tenaga-kerja', 'route' => route('produk.tenaga-kerja.store')])
 
         <script>
-            const modal = document.getElementById("modal-produk");
-            const buttonModal = document.getElementById("button-modal-produk");
-            const form = modal.querySelector("form"); // Ambil elemen form di dalam modal
+            const modalProduk = document.getElementById("modal-produk");
+            const modalBahanBaku = document.getElementById("modal-tabel-bahan-baku");
+            const modalOverhead = document.getElementById("modal-tabel-overhead");
+            const modalTenagaKerja = document.getElementById("modal-tabel-tenaga-kerja");
+
+            const inputModalBahanBaku = document.querySelector('input[name="bahan_baku_id_produk"]');
+            const inputModalOverhead = document.querySelector('input[name="overhead_id_produk"]');
+            const inputModalTenagaKerja = document.querySelector('input[name="tenaga_kerja_id_produk"]');
+
+            const buttonModalProduk = document.getElementById("button-modal-produk");
+            const buttonModalBahanBaku = document.getElementById("button-modal-bahan-baku");
+            const buttonModalOverhead = document.getElementById("button-modal-overhead");
+            const buttonModalTenagaKerja = document.getElementById("button-modal-tenaga-kerja");
+
+            const formProduk = modalProduk.querySelector("form");
+            const formBahanBaku = modalBahanBaku.querySelector("form");
+            const formOverhead = modalOverhead.querySelector("form");
+            const formTenagaKerja = modalTenagaKerja.querySelector("form");
 
             // Buka modal
-            buttonModal.addEventListener("click", () => {
-                modal.classList.remove("hidden");
+            buttonModalProduk.addEventListener("click", () => {
+                modalProduk.classList.remove("hidden");
+            });
+
+            buttonModalBahanBaku.addEventListener("click", () => {
+                modalBahanBaku.classList.remove("hidden");
+            });
+
+            buttonModalOverhead.addEventListener("click", () => {
+                modalOverhead.classList.remove("hidden");
+            });
+
+            buttonModalTenagaKerja.addEventListener("click", () => {
+                modalTenagaKerja.classList.remove("hidden");
             });
 
             // Tutup modal ketika area luar modal diklik
-            modal.addEventListener("click", (event) => {
-                if (event.target === modal) {
-                    // Cek apakah yang diklik adalah area luar modal
+            modalProduk.addEventListener("click", (event) => {
+                if (event.target === modalProduk) {
+                    closeProductModal();
+                }
+            });
+
+            modalBahanBaku.addEventListener("click", (event) => {
+                if (event.target === modalBahanBaku) {
+                    closeProductModal();
+                }
+            });
+
+            modalOverhead.addEventListener("click", (event) => {
+                if (event.target === modalOverhead) {
+                    closeProductModal();
+                }
+            });
+
+            modalTenagaKerja.addEventListener("click", (event) => {
+                if (event.target === modalTenagaKerja) {
                     closeProductModal();
                 }
             });
 
             // Fungsi untuk menutup modal dan mereset form
             function closeProductModal() {
-                modal.classList.add("hidden");
+                modalProduk.classList.add("hidden");
+                modalBahanBaku.classList.add("hidden");
+                modalOverhead.classList.add("hidden");
+                modalTenagaKerja.classList.add("hidden");
+
                 resetForm(); // Reset semua nilai input
             }
 
             // Fungsi untuk mereset form
             function resetForm() {
-                form.reset(); // Reset semua input di dalam form
+                formProduk.reset();
+                formBahanBaku.reset();
+                formOverhead.reset();
+                formTenagaKerja.reset();
             }
 
             function loadProdukData(produkId) {
+                const kodeProduk = document.querySelector('[data-kode-produk]')?.dataset.kodeProduk;
+
+                inputModalBahanBaku.placeholder = kodeProduk;
+                inputModalBahanBaku.setAttribute('value', produkId);
+
+                inputModalOverhead.placeholder = kodeProduk;
+                inputModalOverhead.setAttribute('value', produkId);
+
+                inputModalTenagaKerja.placeholder = kodeProduk;
+                inputModalTenagaKerja.setAttribute('value', produkId);
+
                 fetch(`/produk/${produkId}`)
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log("Data dari server:", data); // Debug respons dari server
-                        
                         // Isi tabel dengan data yang diambil
                         fillTable("bahan-baku-table", data.bahan_baku);
                         fillTable("overhead-table", data.overhead);
@@ -308,46 +323,36 @@
                     .catch((error) => console.error("Error:", error));
             }
 
-
             function fillTable(tableId, data) {
-                console.log(`Mengisi tabel ${tableId} dengan data:`, data); // Debug isi data
                 const tableBody = document.querySelector(`#${tableId} tbody`);
                 tableBody.innerHTML = "";
 
-                if (data && Object.keys(data).length > 0) {
-                    const row = document.createElement("tr");
+                if (data && data.length > 0) {
+                    data.forEach((item) => {
+                        const row = document.createElement("tr");
 
-                    Object.entries(data).forEach(([key, value]) => {
-                        const cell = document.createElement("td");
-                        cell.className = "border border-gray-300 px-4 py-2 text-sm text-center";
-                        cell.textContent = value;
-                        row.appendChild(cell);
+                        Object.entries(item).forEach(([key, value]) => {
+                            const cell = document.createElement("td");
+                            cell.className = "border border-gray-300 px-4 py-2 text-sm text-center";
+                            cell.textContent = value;
+                            row.appendChild(cell);
+                        });
+
+                        tableBody.appendChild(row);
                     });
-
-                    tableBody.appendChild(row);
-                } else {
-                    const row = document.createElement("tr");
-                    const cell = document.createElement("td");
-                    cell.className = "border border-gray-300 px-4 py-2 text-sm text-center";
-                    cell.colSpan = 6;
-                    cell.textContent = "Tidak ada data.";
-                    row.appendChild(cell);
-                    tableBody.appendChild(row);
                 }
             }
 
-
+            
             function calculateTotal(data) {
                 if (!data) return "Rp 0";
 
-                // Ambil jumlah dan harga_satuan untuk menghitung total jika total tidak tersedia
-                const jumlah = parseFloat(data.jumlah || 0);
-                const hargaSatuan = parseFloat(data.harga_satuan || 0);
+                const numericTotal = data.reduce((acc, item) => {
+                    const jumlah = parseFloat(item.jumlah || 0);
+                    const hargaSatuan = parseFloat(item.harga_satuan || 0);
+                    return acc + jumlah * hargaSatuan;
+                }, 0);
 
-                // Hitung total
-                const numericTotal = jumlah * hargaSatuan;
-
-                // Format total menjadi "Rp 40.000"
                 const formattedTotal = "Rp " + new Intl.NumberFormat("id-ID", {
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 0,
@@ -357,18 +362,6 @@
             }
 
 
-            // Fungsi-fungsi lain (opsional)
-            function openBahanBakuModal() {
-                alert("Open Bahan Baku modal");
-            }
-
-            function openOverheadModal() {
-                alert("Open Overhead modal");
-            }
-
-            function openTenagaKerjaModal() {
-                alert("Open Tenaga Kerja modal");
-            }
         </script>
     </body>
 </html>
