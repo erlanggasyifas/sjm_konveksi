@@ -52,6 +52,54 @@ class ProdukController extends Controller
         return redirect()->route('produk.index');
     }
 
+    public function storeBahanBakuProduk(Request $request)
+    {
+        $request->validate([
+            'bahan_baku_id' => 'required',
+            'bahan_baku_id_produk' => 'required',
+            'bahan_baku_jumlah' => 'required|numeric',
+        ]);
+
+        $bahanBaku = BahanBaku::find($request->bahan_baku_id);
+        $produk = Produk::find($request->bahan_baku_id_produk);
+
+        $produk->bahanBakus()->syncWithoutDetaching([$bahanBaku->id => ['jumlah_bahan_baku' => $request->bahan_baku_jumlah]]);
+
+        return redirect()->route('produk.index');
+    }
+
+    public function storeOverheadPabrikProduk(Request $request)
+    {
+        $request->validate([
+            'overhead_id' => 'required',
+            'overhead_id_produk' => 'required',
+            'overhead_jumlah' => 'required|numeric',
+        ]);
+
+        $overheadPabrik = BahanBaku::find($request->overhead_id);
+        $produk = Produk::find($request->overhead_id_produk);
+
+        $produk->overheadPabriks()->syncWithoutDetaching([$overheadPabrik->id => ['jumlah_overhead' => $request->overhead_jumlah]]);
+
+        return redirect()->route('produk.index');
+    }
+
+    public function storeTenagaKerjaProduk(Request $request)
+    {
+        $request->validate([
+            'tenaga_kerja_id' => 'required',
+            'tenaga_kerja_id_produk' => 'required',
+            'tenaga_kerja_jumlah' => 'required|numeric',
+        ]);
+
+        $tenagaKerja = BahanBaku::find($request->tenaga_kerja_id);
+        $produk = Produk::find($request->tenaga_kerja_id_produk);
+
+        $produk->tenagaKerjas()->syncWithoutDetaching([$tenagaKerja->id => ['jumlah_tenaga_kerja' => $request->tenaga_kerja_jumlah]]);
+
+        return redirect()->route('produk.index');
+    }
+
     public function show($id)
     {
         $produk = Produk::find($id);

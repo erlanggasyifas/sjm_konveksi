@@ -87,7 +87,7 @@
                             </thead>
                             <tbody style="cursor: pointer;">
                                 @if($produks->isNotEmpty()) @foreach($produks as $produk)
-                                <tr onclick="loadProdukData({{ $produk->id }})">
+                                <tr data-id="{{ $produk->id }}" data-kode-produk="{{ $produk->kode_produk }}" onclick="loadProdukData({{ $produk->id }})">
                                     <td class="border border-gray-300 px-4 py-2 text-sm text-center">{{ $produk->kode_produk }}</td>
                                     <td class="border border-gray-300 px-4 py-2 text-sm text-center">{{ $produk->nama_produk }}</td>
                                 </tr>
@@ -204,19 +204,23 @@
         @include('partials.produkmodal', ['id' => 'modal-produk', 'route' => route('produk.store')])
 
         <!-- Modal Bahan Baku -->
-        @include('partials.bahanbakumodal', ['id' => 'modal-tabel-bahan-baku', 'route' => route('bahan-baku.store')])
+        @include('partials.bahanbakumodal', ['id' => 'modal-tabel-bahan-baku', 'route' => route('produk.bahan-baku.store')])
 
         <!-- Modal Overhead Pabrik -->
-        @include('partials.overheadpabrikmodal', ['id' => 'modal-tabel-overhead', 'route' => route('overhead-pabrik.store')])
+        @include('partials.overheadpabrikmodal', ['id' => 'modal-tabel-overhead', 'route' => route('produk.overhead-pabrik.store')])
 
         <!-- Modal Tenaga Kerja -->
-        @include('partials.tenagakerjamodal', ['id' => 'modal-tabel-tenaga-kerja', 'route' => route('tenaga-kerja.store')])
+        @include('partials.tenagakerjamodal', ['id' => 'modal-tabel-tenaga-kerja', 'route' => route('produk.tenaga-kerja.store')])
 
         <script>
             const modalProduk = document.getElementById("modal-produk");
             const modalBahanBaku = document.getElementById("modal-tabel-bahan-baku");
             const modalOverhead = document.getElementById("modal-tabel-overhead");
             const modalTenagaKerja = document.getElementById("modal-tabel-tenaga-kerja");
+
+            const inputModalBahanBaku = document.querySelector('input[name="bahan_baku_id_produk"]');
+            const inputModalOverhead = document.querySelector('input[name="overhead_id_produk"]');
+            const inputModalTenagaKerja = document.querySelector('input[name="tenaga_kerja_id_produk"]');
 
             const buttonModalProduk = document.getElementById("button-modal-produk");
             const buttonModalBahanBaku = document.getElementById("button-modal-bahan-baku");
@@ -289,6 +293,17 @@
             }
 
             function loadProdukData(produkId) {
+                const kodeProduk = document.querySelector('[data-kode-produk]')?.dataset.kodeProduk;
+
+                inputModalBahanBaku.placeholder = kodeProduk;
+                inputModalBahanBaku.setAttribute('value', produkId);
+
+                inputModalOverhead.placeholder = kodeProduk;
+                inputModalOverhead.setAttribute('value', produkId);
+
+                inputModalTenagaKerja.placeholder = kodeProduk;
+                inputModalTenagaKerja.setAttribute('value', produkId);
+
                 fetch(`/produk/${produkId}`)
                     .then((response) => response.json())
                     .then((data) => {
@@ -345,6 +360,8 @@
 
                 return formattedTotal;
             }
+
+
         </script>
     </body>
 </html>
