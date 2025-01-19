@@ -292,8 +292,6 @@
                 fetch(`/produk/${produkId}`)
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log("Data dari server:", data); // Debug respons dari server
-                        
                         // Isi tabel dengan data yang diambil
                         fillTable("bahan-baku-table", data.bahan_baku);
                         fillTable("overhead-table", data.overhead);
